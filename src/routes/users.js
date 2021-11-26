@@ -1,7 +1,9 @@
 import {Router} from 'express'
 import userSchema from "../models/userSchema"
-import {createPerson,login} from "../controller/controller";
-import {authentication} from "../middleware/auth"
+import {createPerson,login,getAccessfromRefreshToken} from "../controller/controller";
+import {authentication,authRefreshToken} from "../middleware/auth"
+import jwt from 'jsonwebtoken'
+const {REFRESH_TOKEN}=process.env
 const router=Router();
 const response=[
     'gow','test','ragnee','akash'
@@ -34,6 +36,11 @@ router.get("/getNames",authentication,async(req,res)=>{
     const data=await userSchema.find({});
     res.json(data)
 });
+//get access token from refreshtoken
+router.post('/accessToken',(req,res)=>{
+    getAccessfromRefreshToken(req,res)
+
+})
 
 router.get("/login",(req,res)=>{
     login(req,res)
